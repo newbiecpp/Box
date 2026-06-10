@@ -3,117 +3,186 @@ using System.Collections;
 
 public class BoxController : MonoBehaviour
 {
-    [Header("Cấu hình Animation")]
+    [Header("Animation")]
     public Animator boxAnimator;
     public string triggerName = "DongHop";
-    public string animationStateName = "Armature|ArmatureAction";
+    public float thoiGianDongHop = 1f;
 
-    [Header("Cấu hình Lật")]
+    [Header("Lật hộp")]
     public float thoiGianLat = 0.3f;
     public float kichThuocHop = 1f;
 
+    [Header("Vuốt")]
+    public float nguongVuot = 100f;
+
     private bool dangLat = false;
-    private bool daDongHop = false;
     private float banKinhXoay;
+    private Vector2 diemBatDauVuot;
 
     void Start()
     {
         banKinhXoay = kichThuocHop / 2f;
+        StartCoroutine(DongHopBanDau());
+    }
+
+    void Update()
+    {
+        XuLyVuotDienThoai();
+
+#if UNITY_EDITOR
+        XuLyVuotChuot();
+#endif
+    }
+
+    IEnumerator DongHopBanDau()
+    {
+        dangLat = true;
+
+        if (boxAnimator != null)
+        {
+            boxAnimator.SetTrigger(triggerName);
+            yield return new WaitForSeconds(thoiGianDongHop);
+        }
+
+        dangLat = false;
+    }
+
+    void XuLyVuotDienThoai()
+    {
+        if (Input.touchCount == 0) return;
+
+        Touch touch = Input.GetTouch(0);
+
+        switch (touch.phase)
+        {
+            case TouchPhase.Began:
+                diemBatDauVuot = touch.position;
+                break;
+
+            case TouchPhase.Ended:
+                XuLyHuongVuot(touch.position - diemBatDauVuot);
+                break;
+        }
+    }
+
+    void XuLyVuotChuot()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            diemBatDauVuot = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector2 doLech =
+                (Vector2)Input.mousePosition - diemBatDauVuot;
+
+            XuLyHuongVuot(doLech);
+        }
+    }
+
+    void XuLyHuongVuot(Vector2 doLech)
+    {
+        if (doLech.magnitude < nguongVuot)
+            return;
+
+        if (Mathf.Abs(doLech.x) > Mathf.Abs(doLech.y))
+        {
+            if (doLech.x > 0)
+                NutSangPhai();
+            else
+                NutSangTrai();
+        }
+        else
+        {
+            if (doLech.y > 0)
+                NutTienLen();
+            else
+                NutLuiLai();
+        }
     }
 
     public void NutSangTrai()
     {
         if (dangLat) return;
 
-        // Tâm lật nằm ở cạnh dưới bên trái (trục X giảm)
-        Vector3 tamLat = transform.position + new Vector3(-banKinhXoay, -banKinhXoay, 0);
-        Vector3 trucXoay = Vector3.forward; // Quay quanh trục Z để sang trái
+        Vector3 tamLat =
+            transform.position +
+            new Vector3(-banKinhXoay, -banKinhXoay, 0);
 
-        StartCoroutine(QuyTrinhXuLy(tamLat, trucXoay));
+        StartCoroutine(
+            QuyTrinhLat(tamLat, Vector3.forward)
+        );
     }
 
-    // --- 2. HÀM CHO NÚT RIGHT (SANG PHẢI) ---
     public void NutSangPhai()
     {
         if (dangLat) return;
 
-        // Tâm lật nằm ở cạnh dưới bên phải (trục X tăng)
-        Vector3 tamLat = transform.position + new Vector3(banKinhXoay, -banKinhXoay, 0);
-        Vector3 trucXoay = Vector3.back; // Quay ngược quanh trục Z để sang phải
+        Vector3 tamLat =
+            transform.position +
+            new Vector3(banKinhXoay, -banKinhXoay, 0);
 
-        StartCoroutine(QuyTrinhXuLy(tamLat, trucXoay));
+        StartCoroutine(
+            QuyTrinhLat(tamLat, Vector3.back)
+        );
     }
 
-    // --- 3. HÀM CHO NÚT UP (TIẾN LÊN) ---
     public void NutTienLen()
     {
         if (dangLat) return;
 
-        // Tâm lật nằm ở cạnh dưới phía trước (trục Z tăng)
-        Vector3 tamLat = transform.position + new Vector3(0, -banKinhXoay, banKinhXoay);
-        Vector3 trucXoay = Vector3.right; // Quay quanh trục X để lật tiến lên
+        Vector3 tamLat =
+            transform.position +
+            new Vector3(0, -banKinhXoay, banKinhXoay);
 
-        StartCoroutine(QuyTrinhXuLy(tamLat, trucXoay));
+        StartCoroutine(
+            QuyTrinhLat(tamLat, Vector3.right)
+        );
     }
 
-    // --- 4. HÀM CHO NÚT DOWN (LÙI LẠI) ---
     public void NutLuiLai()
     {
         if (dangLat) return;
 
-        // Tâm lật nằm ở cạnh dưới phía sau (trục Z giảm)
-        Vector3 tamLat = transform.position + new Vector3(0, -banKinhXoay, -banKinhXoay);
-        Vector3 trucXoay = Vector3.left; // Quay ngược quanh trục X để lật lùi lại
+        Vector3 tamLat =
+            transform.position +
+            new Vector3(0, -banKinhXoay, -banKinhXoay);
 
-        StartCoroutine(QuyTrinhXuLy(tamLat, trucXoay));
+        StartCoroutine(
+            QuyTrinhLat(tamLat, Vector3.left)
+        );
     }
 
-    // --- QUY TRÌNH KẾT HỢP ANIMATION VÀ LẬT ---
-    IEnumerator QuyTrinhXuLy(Vector3 tamLat, Vector3 trucXoay)
+    IEnumerator QuyTrinhLat(
+        Vector3 tamLat,
+        Vector3 trucXoay)
     {
-        dangLat = true; // Khóa nút
+        dangLat = true;
 
-        // Nếu hộp chưa đóng: Chạy animation đóng hộp trước
-        if (!daDongHop)
-        {
-            if (boxAnimator != null)
-            {
-                boxAnimator.SetTrigger(triggerName);
-
-                // Chờ một chút để Animator kịp chuyển trạng thái
-                yield return new WaitForSeconds(0.1f);
-
-                float thoiGianAnimation = 1.0f;
-                AnimatorStateInfo stateInfo = boxAnimator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName(animationStateName))
-                {
-                    thoiGianAnimation = stateInfo.length;
-                }
-
-                // Chờ cho đến khi hộp đóng nắp hoàn toàn
-                yield return new WaitForSeconds(thoiGianAnimation);
-            }
-
-            daDongHop = true; // Đánh dấu đã đóng hộp
-        }
-
-        // THỰC HIỆN XOAY LẬT 90 ĐỘ
         float gocDaXoay = 0f;
+
         while (gocDaXoay < 90f)
         {
-            float gocTrongKhungHinh = (90f / thoiGianLat) * Time.deltaTime;
+            float gocMoiKhungHinh =
+                (90f / thoiGianLat) * Time.deltaTime;
 
-            if (gocDaXoay + gocTrongKhungHinh > 90f)
+            if (gocDaXoay + gocMoiKhungHinh > 90f)
             {
-                gocTrongKhungHinh = 90f - gocDaXoay;
+                gocMoiKhungHinh =
+                    90f - gocDaXoay;
             }
 
-            transform.RotateAround(tamLat, trucXoay, gocTrongKhungHinh);
-            gocDaXoay += gocTrongKhungHinh;
+            transform.RotateAround(
+                tamLat,
+                trucXoay,
+                gocMoiKhungHinh);
+
+            gocDaXoay += gocMoiKhungHinh;
 
             yield return null;
         }
 
-        dangLat = false; // Mở khóa nút
+        dangLat = false;
     }
 }

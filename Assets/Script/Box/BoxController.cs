@@ -8,6 +8,9 @@ public class BoxController : MonoBehaviour
     public string triggerName = "DongHop";
     public float thoiGianDongHop = 1f;
 
+    [Header("UI Manager Liên Kết")]
+    public GameplayUIManager uiManager;
+
     [Header("Lật hộp")]
     public float thoiGianLat = 0.3f;
     public float kichThuocHop = 1f;
@@ -17,6 +20,10 @@ public class BoxController : MonoBehaviour
     void Start()
     {
         banKinhXoay = kichThuocHop / 2f;
+        if (uiManager != null)
+        {
+            uiManager.PreHideAllUI();
+        }
         StartCoroutine(DongHopBanDau());
     }
 
@@ -28,6 +35,11 @@ public class BoxController : MonoBehaviour
         {
             boxAnimator.SetTrigger(triggerName);
             yield return new WaitForSeconds(thoiGianDongHop);
+        }
+
+        if (uiManager != null)
+        {
+            uiManager.TriggerShowAllPopups();
         }
 
         dangLat = false;

@@ -830,7 +830,6 @@ MonoBehaviour:
   thoiGianDongHop: 1
   thoiGianLat: 0.3
   kichThuocHop: 0.025
-  nguongVuot: 100
 --- !u!95 &1096070184
 Animator:
   serializedVersion: 7
@@ -1094,7 +1093,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3286163911610860551, guid: b362af78534d0794ca60b9f241f60f86, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 235257b3a9b2cd84b95546c30ad552e7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -583,7 +583,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 10
+  field of view: 12.25
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -609,8 +609,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 827521346}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.050081193, y: 0.0000000062246244, z: -3.1212827e-10, w: 0.9987452}
-  m_LocalPosition: {x: 0, y: 0.21000001, z: -1.3}
+  m_LocalRotation: {x: 0.38268343, y: 4.2653317e-17, z: -1.7667582e-17, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 6.1, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -702,15 +702,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 75a6b752e4d65964c83ffd42b3194fde, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.03
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75a6b752e4d65964c83ffd42b3194fde, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.03
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75a6b752e4d65964c83ffd42b3194fde, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.03
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75a6b752e4d65964c83ffd42b3194fde, type: 3}
       propertyPath: m_LocalPosition.x
@@ -718,7 +718,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75a6b752e4d65964c83ffd42b3194fde, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.01
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75a6b752e4d65964c83ffd42b3194fde, type: 3}
       propertyPath: m_LocalPosition.z
@@ -827,7 +827,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoxController
   boxAnimator: {fileID: 1096070184}
   triggerName: DongHop
-  thoiGianDongHop: 1
+  thoiGianDongHop: 2.5
+  vcam: {fileID: 2024487601}
+  offsetGocGan: {x: 0, y: 1, z: -3}
+  offsetGocXa: {x: 0, y: 6, z: -6}
+  thoiGianZoomOut: 2
+  uiManager: {fileID: 0}
+  questArrow: {fileID: 0}
   thoiGianLat: 0.3
   kichThuocHop: 0.025
 --- !u!95 &1096070184
@@ -1508,7 +1514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRotationComposer
   Composition:
-    ScreenPosition: {x: 0, y: 0.3}
+    ScreenPosition: {x: 0, y: 0}
     DeadZone:
       Enabled: 0
       Size: {x: 0.2, y: 0.2}
@@ -1542,7 +1548,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 0.2, z: -1.3}
+  FollowOffset: {x: 0, y: 6, z: -6}
 --- !u!114 &2024487601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1567,7 +1573,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 10
+    FieldOfView: 12.25
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -1594,8 +1600,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024487598}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.050081182, y: 0.000000006224623, z: -3.121281e-10, w: 0.9987452}
-  m_LocalPosition: {x: 0, y: 0.21000001, z: -1.3}
+  m_LocalRotation: {x: 0.38268343, y: 5.7469134e-17, z: -5.3436136e-17, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 6.1, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
